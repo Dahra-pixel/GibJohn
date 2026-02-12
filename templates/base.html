@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <ul>
+    <li><a href="{{ url_for('products') }}">Products</a></li>
+    <li><a href="{{ url_for('news') }}">News</a></li>
+
+    <li class="nav_logo">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='static/GibJohn Tutoring Logo with Book and Lightbulb Icon.png') }}" alt="">
+        </a>
+    </li>
+
+    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    <li><a href="{{ url_for('about') }}">About</a></li>
+</ul>
+
+</head>
+<body>
+    {% block content %}
+        <!-- <! - This is where child pages will insert their content → -->
+    {% endblock %}
+    
+</body>
+</html>

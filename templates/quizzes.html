@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="quiz-container">
+    <div id="quiz-box">
+        <h2 id="question"></h2>
+        <p id="progress"></p>
+        <div id="answers"></div>
+
+        <button id="next-btn" onclick="nextQuestion()" disabled>Next</button>
+        <button id="submit-btn" onclick="submitQuiz()" style="display:none;">Submit</button>
+    </div>
+</section>
+
+
+<script>
+    const quizData = [
+        { question: "What is 2 + 2?", answers: ["3","4","5"], correct: 1 },
+        { question: "What is 5 × 3?", answers: ["15","8","10"], correct: 0 },
+        { question: "What is 10 ÷ 2?", answers: ["5","2","8"], correct: 0 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedAnswer = null;
+
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    const nextBtn = document.getElementById("next-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    const progressEl = document.getElementById("progress");
+
+    function loadQuestion() {
+        selectedAnswer = null;
+        nextBtn.disabled = true;
+
+        const current = quizData[currentQuestion];
+        questionEl.textContent = current.question;
+        answersEl.innerHTML = "";
+
+        progressEl.textContent = `Question ${currentQuestion + 1} / ${quizData.length}`;
+
+        current.answers.forEach((answer, index) => {
+            const btn = document.createElement("button");
+            btn.textContent = answer;
+            btn.classList.add("answer-btn");
+            btn.onclick = () => selectAnswer(index, btn);
+            answersEl.appendChild(btn);
+        });
+
+        // Toggle buttons
+        if (currentQuestion === quizData.length - 1) {
+            nextBtn.style.display = "none";
+            submitBtn.style.display = "inline-block";
+        } else {
+            nextBtn.style.display = "inline-block";
+            submitBtn.style.display = "none";
+        }
+    }
+
+    function selectAnswer(index, btn) {
+        selectedAnswer = index;
+        nextBtn.disabled = false;
+        Array.from(answersEl.children).forEach(b => b.style.backgroundColor = "#cbdbd9");
+        btn.style.backgroundColor = "#a0e7e5";
+    }
+
+    function nextQuestion() {
+        if (selectedAnswer === quizData[currentQuestion].correct) score++;
+        currentQuestion++;
+        loadQuestion();
+    }
+
+    function submitQuiz() {
+        if (selectedAnswer === quizData[currentQuestion].correct) score++;
+        fetch("/submit_quiz", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ score: score, total: quizData.length })
+        })
+        .then(res => res.json())
+        .then(() => window.location.href = "/report");
+    }
+
+    loadQuestion();
+</script>
+
+{% endblock %}

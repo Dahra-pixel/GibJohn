@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <section class="report-container">
+        <h2>Your Quiz Results</h2>
+        <p>{{ result.username }}, you scored {{ result.score }} out of {{ result.total }}</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: result_percentage "></div>
+        </div>
+
+        {% if result.score == result.total %}
+            <p>Perfect! You're a genius 🤯</p>
+        {% elif result.score >= result.total / 2 %}
+            <p>Nice! You did well 😎</p>
+        {% else %}
+            <p>Keep trying! You’ll get it next time 💪</p>
+        {% endif %}
+    </section>
+
+    <style>
+        .report-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: linear-gradient(135deg,#eef3f1,#cbdcd6);
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #b2c5c5;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #356663;
+            border-radius: 12px 0 0 12px;
+            transition: width 1s ease-in-out;
+        }
+    </style>
+
+{% endblock %}

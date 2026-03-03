@@ -3,9 +3,19 @@
 
 <section class="hero">
     <div class="hero-inner">
-        <h1>GibJohn Tutoring</h1>
-        <p>Focused learning. Real progress. Zero overwhelm.</p>
+
+        <h1 class="brand-title">GibJohn Tutoring</h1>
+
+        {% if user %}
+            <h2 class="welcome-text">Welcome back, {{ user }}</h2>
+        {% endif %}
+
+        <p class="hero-subtext">
+            Focused learning. Real progress. Zero overwhelm.
+        </p>
+
         <a href="#" class="primary-btn">Start Learning</a>
+
     </div>
 </section>
 

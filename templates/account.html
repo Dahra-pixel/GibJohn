@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="account-hero">
+    <h1>My Account</h1>
+    <p>Welcome back, {{ username }}</p>
+</section>
+
+<section class="account-container">
+
+    <div class="account-summary">
+        <div class="summary-card">
+            <h3>Total Quizzes</h3>
+            <p>{{ results|length }}</p>
+        </div>
+
+        <div class="summary-card">
+            <h3>Average Score</h3>
+            <p>{{ average }}%</p>
+        </div>
+    </div>
+
+    <div class="history-section">
+        <h2>Quiz History</h2>
+
+        {% if results %}
+        <div class="history-grid">
+            {% for result in results %}
+            <div class="history-card">
+                <div class="score-circle">
+                    {{ ((result.score / result.total) * 100) | round(0) }}%
+                </div>
+                <div class="history-info">
+                    <p><strong>Score:</strong> {{ result.score }}/{{ result.total }}</p>
+                    <p class="date">{{ result.date.strftime("%d %b %Y") }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No quizzes completed yet.</p>
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

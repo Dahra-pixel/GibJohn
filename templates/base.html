@@ -24,8 +24,9 @@
 
             <li><a href="{{ url_for('contact') }}">Contact</a></li>
             
+            <li><a href="{{ url_for('account') }}">Account</a></li>
+            <div>class="nav_right"</div>
             {% if user %}
-                <!-- <li><a href="#">Hi, {{ user }}</a></li> -->
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
                 <li><a href="#" onclick="openLogin()">Login</a></li>

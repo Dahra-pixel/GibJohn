@@ -30,12 +30,15 @@ body {
     ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 0 40px;
     background-color: #cbdcd6;
 
-    display: flex;          /* enables flexbox */
-    justify-content: center; /* centers the items horizontally */
-    align-items: center;     /* vertically centers them (optional) */
+    display: flex;
+    align-items: center;
+}
+
+    ul li:last-child {
+        margin-left: auto;
     }
 
 
@@ -603,4 +606,102 @@ footer {
         padding: 0 20px;
         gap: 25px;
     }
+}
+
+/* Accounts */
+/* ACCOUNT PAGE */
+
+.account-hero {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #25374a, #356663);
+    color: white;
+    text-align: center;
+}
+
+.account-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.account-summary {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+
+.summary-card {
+    background: #eef3f1;
+    padding: 30px;
+    border-radius: 16px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-6px);
+}
+
+.summary-card h3 {
+    color: #356663;
+    margin-bottom: 10px;
+}
+
+.summary-card p {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #25374a;
+}
+
+/* HISTORY SECTION */
+
+.history-section h2 {
+    margin-bottom: 30px;
+    color: #356663;
+}
+
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.history-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #f4f9f9;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: 0.3s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-5px);
+}
+
+.score-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #356663;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.history-info p {
+    margin: 4px 0;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: #777;
 }

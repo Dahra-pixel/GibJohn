@@ -100,6 +100,20 @@ def report():
         result_percentage=result_percentage_str
     )
 
+@app.route("/account")
+def account():
+    if "user" not in session:
+        return redirect(url_for("home"))
+
+    username = session["user"]
+
+    user_results = [r for r in quiz_results if r["username"] == username]
+    
+
+    return render_template("account.html", 
+                           username=username, 
+                           results=user_results)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

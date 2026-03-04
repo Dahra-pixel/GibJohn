@@ -2,120 +2,144 @@
 
 
 
-html, body {
-    height: 100%;
+/* RESET */
+* {
     margin: 0;
-  }
-
-
-main {
-    flex: 1;
+    padding: 0;
+    box-sizing: border-box;
 }
-
 
 body {
-  display: flex;
-  flex-direction: column;
-  color: #2E4A3B;
-  text-align: center;
+    font-family: "Inter", sans-serif;
+    background: #f7f9fb;
+    color: #1f2a37;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+/* LAYOUT */
+.main-content {
+    flex: 1;
+    padding: 80px 8%;
+}
 
-
-
-
-
-
-/* Navigation bar */
-    ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0 40px;
-    background-color: #cbdcd6;
-
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    z-index: 1000;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 30px;
     align-items: center;
 }
 
-    ul li:last-child {
-        margin-left: auto;
-    }
+.nav-center img {
+    height: 50px;
+    border-radius: 12px;
+}
 
-
-    ul li a {
-    display: block;
-    color: #25374a;
-    text-align: center;
-    padding: 14px 16px;
+.navbar a {
     text-decoration: none;
-    }
+    color: #25374a;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
 
+.navbar a:hover {
+    opacity: 0.6;
+}
 
-    ul li a:hover {
-    color: #cbdcd6;
-    background-color: #25374a;
-    }
+/* BUTTON SYSTEM */
+.btn-primary {
+    background: #25374a;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
 
-    /* The Home nav image */
-    .nav_logo img{
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-        object-fit: cover;
-    }
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37,55,74,0.2);
+}
 
-/* HERO SECTION */
+.btn-outline {
+    border: 1px solid #25374a;
+    padding: 8px 20px;
+    border-radius: 30px;
+}
 
-    .hero {
-        height: 80vh;
-        background: linear-gradient(135deg, #25374a 0%, #356663 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #cbdbd9;
-        position: relative;
-        overflow: hidden;
-    }
+.btn-ghost {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
 
-    .hero::after {
-        content: "";
-        position: absolute;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(178,197,197,0.3) 0%, transparent 70%);
-        top: -100px;
-        right: -150px;
-    }
+.full {
+    width: 100%;
+}
 
-    .hero-content {
-        position: relative;
-        z-index: 2;
-    }
+/* FOOTER */
+.footer {
+    text-align: center;
+    padding: 30px;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
 
-    .hero h1 {
-        font-size: 3rem;
-        letter-spacing: 2px;
-    }
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+}
 
-    .hero p {
-        font-size: 1.2rem;
-        margin: 20px 0;
-    }
+.modal-box {
+    background: white;
+    padding: 50px;
+    width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+}
 
-    .cta-btn {
-        padding: 12px 28px;
-        background-color: #cbdbd9;
-        color: #25374a;
-        border-radius: 30px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: 0.3s ease;
-    }
+.modal-box h2 {
+    margin-bottom: 30px;
+}
 
-    .cta-btn:hover {
-        background-color: #b2c5c5;
-        transform: scale(1.05);
-    }
+.modal-box input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    cursor: pointer;
+    font-size: 20px;
+}
 
 
     /* ABOUT SECTION */
@@ -371,14 +395,29 @@ footer {
     font-size: 1.2rem;
 }
 
+/* "X" */
+.modal-box {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #666;
+    transition: 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #000;
+    transform: scale(1.2);
+}
 
 /* Quiz */
-/* .quiz-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-} */
  .quiz-container {
         max-width: 600px;
         margin: 50px auto;
@@ -533,6 +572,100 @@ footer {
     .cta-btn:hover {
         background: #25374a;
     }
+
+    .quiz-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 100px 5%;
+    }
+    
+    .quiz-card {
+        width: 600px;
+        background: white;
+        padding: 50px;
+        border-radius: 24px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+        transition: 0.3s ease;
+    }
+    
+    .quiz-top {
+        margin-bottom: 40px;
+    }
+    
+    .progress-text {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        color: #666;
+    }
+    
+    .progress-bar {
+        height: 8px;
+        background: #e6eef5;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #25374a, #356663);
+        transition: width 0.4s ease;
+    }
+    
+    .question-text {
+        font-size: 1.6rem;
+        margin-bottom: 35px;
+        font-weight: 600;
+    }
+    
+    .answers-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+    
+    .answer-btn {
+        padding: 14px 20px;
+        border-radius: 14px;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        transition: 0.2s ease;
+        font-weight: 500;
+        text-align: left;
+    }
+    
+    .answer-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    
+    .answer-btn.selected {
+        background: #25374a;
+        color: white;
+        border-color: #25374a;
+    }
+    
+    .quiz-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    #next-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
 
    /* Hero Section */
 .resources-hero {
@@ -704,4 +837,77 @@ footer {
 .date {
     font-size: 0.9rem;
     color: #777;
+}
+
+/* Report page */
+.report-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 100px 5%;
+}
+
+.report-card {
+    width: 550px;
+    background: white;
+    padding: 60px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.08);
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25374a, #356663);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 600;
+    box-shadow: 0 15px 40px rgba(37,55,74,0.25);
+}
+
+.score-message {
+    margin: 15px 0 30px;
+    color: #555;
+}
+
+.progress-bar {
+    height: 10px;
+    background: #e8eef3;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #25374a, #356663);
+    transition: width 1s ease;
+}
+
+.feedback {
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+.feedback.success {
+    color: #1f7a4f;
+}
+
+.feedback.good {
+    color: #356663;
+}
+
+.feedback.improve {
+    color: #c0392b;
+}
+
+.report-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }

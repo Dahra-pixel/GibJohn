@@ -2,99 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GibJohn</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <!-- Navigation links -->
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('resources') }}">Resources</a></li>
-            <li><a href="{{ url_for('quiz') }}">Quiz</a></li>
+<header class="navbar">
+    <div class="nav-left">
+        <a href="{{ url_for('resources') }}">Resources</a>
+        <a href="{{ url_for('quiz') }}">Quiz</a>
+        <a href="{{ url_for('about') }}">About</a>
+    </div>
 
-            <li class="nav_logo">
-                <a href="{{ url_for('home') }}">
-                    <img src="{{ url_for('static', filename='images/GibJohn Tutoring Logo with Book and Lightbulb Icon.png') }}" alt="">
-                </a>
-            </li>
+    <div class="nav-center">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='images/GibJohn Tutoring Logo with Book and Lightbulb Icon.png') }}" alt="Logo">
+        </a>
+    </div>
 
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            
-            <li><a href="{{ url_for('account') }}">Account</a></li>
-            <div>class="nav_right"</div>
-            {% if user %}
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% else %}
-                <li><a href="#" onclick="openLogin()">Login</a></li>
-                <li><a href="#" onclick="openRegister()">Register</a></li>
-            {% endif %}
-            <li><a href="{{ url_for('about') }}">About</a></li>
-        </ul>
-    </nav>
+    <div class="nav-right">
+        <a href="{{ url_for('account') }}">Account</a>
 
+        {% if user %}
+            <a href="{{ url_for('logout') }}" class="btn-outline">Logout</a>
+        {% else %}
+            <button onclick="openLogin()" class="btn-ghost">Login</button>
+            <button onclick="openRegister()" class="btn-primary">Register</button>
+        {% endif %}
+    </div>
+</header>
 
-    <main>
-        {% block content %}
-        <!-- LOGIN MODAL -->
-    <div id="loginModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeLogin()">&times;</span>
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>© 2026 GibJohn Tutoring. Built with clarity.</p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeLogin()">×</button>
         <h2>Login</h2>
         <form method="POST" action="/login">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <button type="submit" class="btn-primary full">Login</button>
         </form>
     </div>
-    </div>
-    <!-- REGISTER MODAL -->
-<div id="registerModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeRegister()">&times;</span>
-    <h2>Register</h2>
-    <form method="POST" action="/register">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Register</button>
-    </form>
-  </div>
 </div>
 
-
+<!-- REGISTER MODAL -->
+<div id="registerModal" class="modal">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeRegister()">x</button>
+        <h2>Create Account</h2>
+        <form method="POST" action="/register">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn-primary full">Register</button>
+        </form>
+    </div>
+</div>
 
 <script>
-function openLogin() {
-    document.getElementById("loginModal").style.display = "block";
-}
-
-function closeLogin() {
-    document.getElementById("loginModal").style.display = "none";
-}
-
-function openRegister() {
-    document.getElementById("registerModal").style.display = "block";
-}
-
-function closeRegister() {
-    document.getElementById("registerModal").style.display = "none";
-}
-
-function logout() {
-    document.getElementById("logoutBtn").style.display = "none";
-    alert("Logged out");
-}
-</script>
-        {% endblock %}
-    </main>
+    const loginModal = document.getElementById("loginModal");
+    const registerModal = document.getElementById("registerModal");
     
-
-    <footer> ... </footer>
+    function openLogin() {
+        loginModal.style.display = "flex";
+    }
     
+    function closeLogin() {
+        loginModal.style.display = "none";
+    }
+    
+    function openRegister() {
+        registerModal.style.display = "flex";
+    }
+    
+    function closeRegister() {
+        registerModal.style.display = "none";
+    }
+    
+    /* Close when clicking outside */
+    window.onclick = function(event) {
+        if (event.target === loginModal) {
+            closeLogin();
+        }
+        if (event.target === registerModal) {
+            closeRegister();
+        }
+    }
+    
+    /* Close with Escape key */
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            closeLogin();
+            closeRegister();
+        }
+    });
+    </script>
+
 </body>
 </html>
-

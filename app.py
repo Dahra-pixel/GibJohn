@@ -1,14 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
-from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
 app.secret_key = "supersecretkey"
 
-# DATABASE CONFIG
+DB_NAME = "quiz.db"
+
+
+# -----------------
+# DATABASE HELPERS
+# -----------------
+
+def get_db():
+    return sqlite3.connect(DB_NAME)
+
+
 def init_db():
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -35,9 +44,35 @@ def init_db():
 
 
 # -----------------
-# DATABASE MODELS
+# QUIZ DATA
 # -----------------
 
+QUIZZES = {
+    "Quiz1": [
+        {
+            "question": "What is the capital of England?",
+            "answers": ["Paris", "New York", "London"],
+            "correct": "London"
+        },
+        {
+            "question": "What is the capital of France?",
+            "answers": ["Paris", "New York", "London"],
+            "correct": "Paris"
+        }
+    ],
+    "Quiz2": [
+        {
+            "question": "What is 1 + 1?",
+            "answers": ["1", "2", "3"],
+            "correct": "2"
+        },
+        {
+            "question": "What is 2 + 2?",
+            "answers": ["2", "3", "4"],
+            "correct": "4"
+        }
+    ]
+}
 
 
 # -----------------
@@ -48,12 +83,27 @@ def init_db():
 def home():
     return render_template("home.html", user=session.get("user"))
 
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/resources")
+def resources():
+    return render_template("resources.html")
+
+
+# -----------------
+# AUTH
+# -----------------
+
 @app.route("/register", methods=["POST"])
 def register():
     username = request.form["username"]
-    password = request.form["password"]
+    password = generate_password_hash(request.form["password"])
 
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
     try:
@@ -70,31 +120,24 @@ def register():
     session["user"] = username
     return redirect(url_for("home"))
 
+
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM users WHERE username = ? AND password = ?",
-        (username, password)
-    )
-
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
     user = cursor.fetchone()
     conn.close()
 
-    if user:
+    if user and check_password_hash(user[0], password):
         session["user"] = username
         return redirect(url_for("home"))
 
     return "Invalid credentials"
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
 
 
 @app.route("/logout")
@@ -102,32 +145,33 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
+
+# -----------------
+# QUIZ
+# -----------------
+
 @app.route("/quiz")
 def quiz():
-    return render_template("quizzes.html")
+    return render_template("quizzes.html", quizzes=QUIZZES)
 
-@app.route("/resources")
-def resources():
-    return render_template("resources.html")
 
 @app.route("/submit_quiz", methods=["POST"])
 def submit_quiz():
     if "user" not in session:
-        return {"status": "error"}
+        return jsonify({"status": "error"})
 
     data = request.get_json()
     username = session["user"]
 
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
-    # Get user id
     cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
     user = cursor.fetchone()
 
     if not user:
         conn.close()
-        return {"status": "error"}
+        return jsonify({"status": "error"})
 
     user_id = user[0]
 
@@ -139,7 +183,12 @@ def submit_quiz():
     conn.commit()
     conn.close()
 
-    return {"status": "success"}
+    return jsonify({"status": "success"})
+
+
+# -----------------
+# REPORT
+# -----------------
 
 @app.route("/report")
 def report():
@@ -148,7 +197,7 @@ def report():
 
     username = session["user"]
 
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
@@ -175,13 +224,24 @@ def report():
         return redirect(url_for("quiz"))
 
     score, total, date = result
-    result_percentage = (score / total) * 100
+    percentage = round((score / total) * 100, 2)
 
     return render_template(
         "report.html",
-        result=result,
-        result_percentage=result_percentage
+        score=score,
+        total=total,
+        date=date,
+        percentage=percentage
     )
+
+@app.route("/api/quiz/<quiz_name>")
+def get_quiz(quiz_name):
+    quiz = QUIZZES.get(quiz_name)
+    return {"quiz": quiz}
+
+# -----------------
+# ACCOUNT
+# -----------------
 
 @app.route("/account")
 def account():
@@ -190,7 +250,7 @@ def account():
 
     username = session["user"]
 
-    conn = sqlite3.connect("quiz.db")
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
@@ -212,11 +272,8 @@ def account():
     results = cursor.fetchall()
     conn.close()
 
-    return render_template(
-        "account.html",
-        username=username,
-        results=results
-    )
+    return render_template("account.html", username=username, results=results)
+
 
 if __name__ == "__main__":
     init_db()

@@ -7,7 +7,12 @@ app.secret_key = "supersecretkey"
 
 DB_NAME = "quiz.db"
 
+conn = sqlite3.connect("database.db")
+conn.row_factory = sqlite3.Row   # THIS is the magic line
+cursor = conn.cursor()
 
+#cursor.execute("SELECT score, total, date FROM results WHERE user_id=?", (user_id,))
+results = cursor.fetchall()
 # -----------------
 # DATABASE HELPERS
 # -----------------
@@ -158,9 +163,13 @@ def quiz():
 @app.route("/submit_quiz", methods=["POST"])
 def submit_quiz():
     if "user" not in session:
-        return jsonify({"status": "error"})
+        return jsonify({"status": "error", "message": "Not logged in"})
 
-    data = request.get_json()
+    try:
+        data = request.get_json(force=True)
+    except:
+        return jsonify({"status": "error", "message": "Invalid JSON"}), 400
+
     username = session["user"]
 
     conn = get_db()
@@ -171,7 +180,7 @@ def submit_quiz():
 
     if not user:
         conn.close()
-        return jsonify({"status": "error"})
+        return jsonify({"status": "error", "message": "User not found"})
 
     user_id = user[0]
 
@@ -186,12 +195,14 @@ def submit_quiz():
     return jsonify({"status": "success"})
 
 
+
+
 # -----------------
 # REPORT
 # -----------------
 
-@app.route("/report")
-def report():
+@app.route("/report/<int:result_id>")
+def report(result_id):
     if "user" not in session:
         return redirect(url_for("home"))
 
@@ -226,8 +237,10 @@ def report():
     score, total, date = result
     percentage = round((score / total) * 100, 2)
 
+
     return render_template(
         "report.html",
+        result=result,
         score=score,
         total=total,
         date=date,
@@ -269,7 +282,6 @@ def account():
         ORDER BY date DESC
     """, (user_id,))
 
-    results = cursor.fetchall()
     conn.close()
 
     return render_template("account.html", username=username, results=results)

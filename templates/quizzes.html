@@ -13,7 +13,7 @@
 
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
-                </div>
+                </div> 
             </div>
         </div>
 
@@ -35,8 +35,12 @@
                 Next →
             </button>
 
-            <button id="submit-btn" class="btn-primary" onclick="submitQuiz()" style="display:none;">
+            <button id="submit-btn" type="button" class="btn-primary" onclick="submitQuiz()" style="display:none;">
                 Finish Quiz
+                return 
+                <a href="{{ url_for('report', result_id=loop.index) }}" class="report-btn">
+                    View Report
+                </a>
             </button>
 
         </div>
@@ -89,30 +93,39 @@
     
     
     function selectAnswer(answer){
-    
+
         const correct = currentQuiz[currentIndex].correct
-    
+
         if(answer === correct){
             score++
         }
-    
+
+        document.querySelectorAll(".answer-btn").forEach(btn => {
+            btn.disabled = true
+        })
+
         document.getElementById("next-btn").disabled = false
-    }
-    
-    
-    function nextQuestion(){
-    
-        currentIndex++
-    
-        if(currentIndex < currentQuiz.length){
-            loadQuestion()
-            document.getElementById("next-btn").disabled = true
         }
-        else{
-            document.getElementById("next-btn").style.display = "none"
-            document.getElementById("submit-btn").style.display = "inline-block"
-        }
-    }
+    
+    
+        function nextQuestion(){
+
+            currentIndex++
+
+            if(currentIndex === currentQuiz.length){
+
+                document.getElementById("question").innerText = "Quiz Complete!"
+                document.getElementById("answers").innerHTML = ""
+
+                document.getElementById("next-btn").style.display = "none"
+                document.getElementById("submit-btn").style.display = "inline-block"
+
+                return
+            }
+
+loadQuestion()
+document.getElementById("next-btn").disabled = true
+}
     
     
     function updateProgress(){
@@ -127,22 +140,21 @@
     }
     
     
-    function submitQuiz(){
-    
-        fetch("/submit_quiz", {
+    async function submitQuiz(){
+
+        await fetch("/submit_quiz", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 score: score,
                 total: currentQuiz.length
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            window.location.href = "/report"
-        })
-    
-    }
+        });
+
+        window.location.href = "/report";
+        }
+
+
     
     
     loadQuiz()

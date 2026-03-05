@@ -855,6 +855,60 @@ footer {
     box-shadow: 0 40px 80px rgba(0,0,0,0.08);
 }
 
+/* REPORT PAGE */
+
+.report-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 100px 5%;
+}
+
+.report-card {
+    width: 550px;
+    background: white;
+    padding: 60px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+    animation: fadeIn 0.5s ease;
+}
+
+.report-card h2 {
+    font-size: 2rem;
+    margin-bottom: 35px;
+    color: #25374a;
+}
+
+.report-score {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 35px;
+}
+
+.score-number {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #25374a;
+}
+
+.score-percent {
+    font-size: 1.4rem;
+    color: #356663;
+    font-weight: 500;
+}
+
+.report-details {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.report-btn {
+    display: inline-block;
+}
+
+
 .score-circle {
     width: 120px;
     height: 120px;

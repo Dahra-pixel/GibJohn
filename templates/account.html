@@ -26,16 +26,23 @@
         {% if results %}
         <div class="history-grid">
             {% for result in results %}
-            <div class="history-card">
+                <div class="history-card">
+
                 <div class="score-circle">
-                    {{ ((result.score / result.total) * 100) | round(0) }}%
+                    {{ ((result[0] / result[1]) * 100) | round(0) }}%
                 </div>
+
                 <div class="history-info">
-                    <p><strong>Score:</strong> {{ result.score }}/{{ result.total }}</p>
-                    <p class="date">{{ result.date.strftime("%d %b %Y") }}</p>
+                    <p><strong>Score:</strong> {{ result[0] }}/{{ result[1] }}</p>
+                    <p class="date">{{ result[2] }}</p>
+
+                    <a href="{{ url_for('report', result_id=loop.index) }}" class="report-btn">
+                        View Report
+                    </a>
                 </div>
-            </div>
-            {% endfor %}
+
+</div>
+{% endfor %}
         </div>
         {% else %}
         <p>No quizzes completed yet.</p>

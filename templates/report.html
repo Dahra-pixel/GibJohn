@@ -1,22 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <section class="report-container">
-        <h2>Your Quiz Results</h2>
-        <p>{{ result.username }}, you scored {{ result.score }} out of {{ result.total }}</p>
+<section class="report-wrapper">
 
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: result_percentage "></div>
+    <div class="report-card">
+
+        <h2>Quiz Report</h2>
+
+        <div class="report-score">
+            <span class="score-number">{{ score }}/{{ total }}</span>
+            <span class="score-percent">{{ percentage }}%</span>
         </div>
 
-        {% if result.score == result.total %}
-            <p>Perfect! You're a genius 🤯</p>
-        {% elif result.score >= result.total / 2 %}
-            <p>Nice! You did well 😎</p>
-        {% else %}
-            <p>Keep trying! You’ll get it next time 💪</p>
-        {% endif %}
-    </section>
+        <div class="report-details">
+            <p><strong>Date:</strong> {{ date }}</p>
+        </div>
+
+        <a href="/quiz" class="btn-primary report-btn">Take another quiz</a>
+
+    </div>
+
+</section>
+
+
 
     <style>
         .report-container {
